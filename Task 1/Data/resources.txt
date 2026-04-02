@@ -1,0 +1,4 @@
+Room,R101,Conference Room A,20
+Room,R302,Study Room B,4
+Equipment,E001,MacBook Pro,Apple
+Equipment,E006,Projector A,Sony
