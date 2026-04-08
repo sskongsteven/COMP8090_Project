@@ -1,6 +1,8 @@
 import os
 from user import Student, Staff
 from resource import Room, Equipment
+from utils import Timeutils
+from notification import Notification
 
 
 class BookingSystem:
@@ -35,6 +37,14 @@ class BookingSystem:
                             self.resources.append(Room(resource_id, name, int(extra_info)))
                         elif resource_type == "Equipment":
                             self.resources.append(Equipment(resource_id, name, extra_info))
+
+    def save_data(self):
+        with open("Data/resources.txt", "w") as resourceData:
+            for item in self.resources:
+                if hasattr(item, 'capacity'):
+                    resourceData.write(f"Room,{item.resource_id},{item.name},{item.capacity}\n")
+                else:
+                    resourceData.write(f"Equipment,{item.resource_id},{item.name},{item.brand}\n")
 
     # Process login and store the current user
     def login(self):
@@ -73,14 +83,21 @@ class BookingSystem:
             if item.resource_id == resource_id:
                 if item.check_availability():
                     item.process_booking()
+                    # Record the booking time
+                    time_tool = Timeutils()
+                    booking_time = time_tool.get_current_time()
 
                     # Create booking and save it into list of booking record.
                     booking_record = {
                         "user_id": self.current_user.user_id,
                         "resource_id": item.resource_id,
-                        "resource_name": item.name
+                        "resource_name": item.name,
+                        "time": booking_time
                     }
                     self.bookings.append(booking_record)
+
+                    notifier = Notification()
+                    notifier.send_booking_receipt(self.current_user.name, item.name, booking_time)
 
                     print(f"\nYou have successfully booked: {item.name}!")
                     return
@@ -136,6 +153,7 @@ class BookingSystem:
                 try:
                     capacity = int(input("Enter Room Capacity in Integer: "))
                     self.resources.append(Room(resource_id, name, capacity))
+                    self.save_data()
                     print(f"\nThe Room '{name}' has been added to the system.")
                 except ValueError:
                     print("\nInvalid capacity, please retry with an integer.")
@@ -144,6 +162,7 @@ class BookingSystem:
                 name = input("Enter Equipment Name:")
                 eq_type = input("Enter Equipment Brand/Type: ")
                 self.resources.append(Equipment(resource_id, name, eq_type))
+                self.save_data()
                 print(f"\nThe Equipment '{name}' has been added to the system.")
 
         elif choice == "3":
