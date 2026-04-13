@@ -1,5 +1,14 @@
 Room,R101,Conference Room A,20
 Room,R302,Study Room B,4
+Room,R301,Study Room A,8
 Equipment,E001,MacBook Pro,Apple
 Equipment,E006,Projector A,Sony
 Room,R203,Classroom 2C,40
+Room,R104,Classroom 1C,40
+Room,R105,Classroom 1D,40
+Room,R106,Classroom 1E,30
+Equipment,E007,Projector B,Sony
+Equipment,E002,Basketball A,Nike
+Equipment,E003,Basketball B,Nike
+Equipment,E004,Badminton Racket A,YONEX
+Equipment,E005,Badminton Racket B,YONEX
